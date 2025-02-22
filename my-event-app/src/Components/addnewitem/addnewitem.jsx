@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../Auth/AuthContext";
 import "./addnewitem.css";
 
 const AddNewItem = () => {
   const { accessToken } = useAuth(); // Get Auth Token
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     productName: "",
     productPrice: "",
@@ -15,6 +17,20 @@ const AddNewItem = () => {
   const [items, setItems] = useState([]);
   const [editData, setEditData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://127.0.0.1:8000/login/logout/", {}, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+    logout(); 
+    navigate("/"); 
+  };
+
 
   // 🔹 Fetch vendor's products on mount
   useEffect(() => {
@@ -169,7 +185,9 @@ const AddNewItem = () => {
         <h2 className="nav-title">Vendor Panel</h2>
         <div className="nav-buttons">
           <button className="view-btn">View Items</button>
-          <button className="logout-btn">Logout</button>
+          <button className="logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </div>
 
