@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
 
-    window.location.href = "/login"; // Redirect to login page
+    window.location.href = "/"; // Redirect to login page
   };
 
   // 🔹 Attach token to every request
