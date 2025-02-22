@@ -8,12 +8,12 @@ import { AuthProvider } from "./Components/Auth/AuthContext";
 function App() {
   return (
     <AuthProvider>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 }

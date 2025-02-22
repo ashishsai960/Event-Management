@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../Auth/AuthContext";
 import axios from "axios";
+import Swal from "sweetalert2"; // Import SweetAlert2
 import "./login.css";
 
 const Login = () => {
@@ -21,8 +22,12 @@ const Login = () => {
 
     try {
       const { data } = await axios.post("http://127.0.0.1:8000/login/login/", formData);
-      login(data); 
+      login(data);
 
+      // 🚀 Debug: Redirect to signup after successful login
+      navigate("/signup");
+
+      // Uncomment this after debugging
       // switch (data.user_type) {
       //   case "admin":
       //     navigate("/adminhome");
@@ -36,8 +41,17 @@ const Login = () => {
       //   default:
       //     navigate("/");
       // }
+
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
+
+      // Show SweetAlert2 popup for login errors
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response?.data?.message || "Invalid username or password!",
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
     }
   };
 
