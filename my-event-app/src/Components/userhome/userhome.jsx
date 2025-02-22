@@ -9,16 +9,29 @@ import {
   FaPalette,
 } from "react-icons/fa";
 import "./userhome.css";
+import { useNavigate } from "react-router-dom";
 
 const UserHome = () => {
   const [showVendorOptions, setShowVendorOptions] = useState(false);
+  const navigate = useNavigate();
+
+  const handleVendorSelect = (vendor) => {
+    navigate("/user-vendors", { state: { vendor } });
+  };
 
   return (
     <div className="user-home">
       {/* Navbar */}
       <div className="navbar">
         <h1 className="nav-title">Welcome User</h1>
-        <button className="logout-btn">Logout</button>
+        <div className="nav-btns">
+          <button className="cart-btn" onClick={() => navigate("/cart")}>
+            Cart
+          </button>
+          <button className="logout-btn" onClick={() => alert("Logging Out!")}>
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -34,16 +47,28 @@ const UserHome = () => {
           {/* Expanding Options Inside Vendor Card */}
           {showVendorOptions && (
             <div className="vendor-options">
-              <div className="vendor-option">
+              <div
+                className="vendor-option"
+                onClick={() => handleVendorSelect("Catering")}
+              >
                 <FaUtensils /> Catering
               </div>
-              <div className="vendor-option">
+              <div
+                className="vendor-option"
+                onClick={() => handleVendorSelect("Florist")}
+              >
                 <FaLeaf /> Florist
               </div>
-              <div className="vendor-option">
+              <div
+                className="vendor-option"
+                onClick={() => handleVendorSelect("Decoration")}
+              >
                 <FaPalette /> Decoration
               </div>
-              <div className="vendor-option">
+              <div
+                className="vendor-option"
+                onClick={() => handleVendorSelect("Lighting")}
+              >
                 <FaLightbulb /> Lighting
               </div>
             </div>
