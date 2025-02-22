@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import Swal from "sweetalert2";
 import "./signup.css";
 
+
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
@@ -16,9 +20,38 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Signup Submitted", formData);
+
+    const userData = {
+      username: formData.userID, // Backend expects 'username', not 'userID'
+      email: formData.email,
+      password: formData.password,
+      user_type: formData.userType,
+      category: formData.userType === "vendor" ? formData.category : "",
+    };
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/signup/register/", userData);
+      console.log("response from backend: ", response.data)
+
+      Swal.fire({
+        icon: "success",
+        title: "Registration Successful",
+        text: "You can now log in!",
+      });
+
+      // Redirect to login after successful signup
+      navigate("/");
+    } catch (error) {
+      console.error("Signup error:", error.response?.data || error.message);
+
+      Swal.fire({
+        icon: "error",
+        title: "Signup Failed",
+        text: error.response?.data?.message || "An error occurred during signup.",
+      });
+    }
   };
 
   return (
@@ -67,7 +100,7 @@ const Signup = () => {
             <option value="">User Type</option>
             <option value="admin">Admin</option>
             <option value="vendor">Vendor</option>
-            <option value="user">User</option>
+            <option value="customer">Customer</option>
           </select>
           {formData.userType === "vendor" && (
             <select
