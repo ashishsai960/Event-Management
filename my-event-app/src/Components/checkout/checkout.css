@@ -1,0 +1,109 @@
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #333;
+  color: white;
+  padding: 20px 40px;
+  height: 30px;
+}
+
+.nav-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.nav-btns {
+  display: flex;
+  gap: 15px;
+}
+
+/* Button Styling */
+.cart-btn,
+.logout-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 120px;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.cart-btn:hover,
+.logout-btn:hover {
+  background-color: #cc0000;
+  color: white;
+}
+
+/* Grand Total */
+.grand-total {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+/* Checkout Form */
+.checkout-form {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 5px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  /* margin-bottom: 5px; */
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+
+.form-group input::placeholder {
+  color: black;
+}
+
+/* Two Fields in One Row */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  background-color: #252f29;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+.submit-btn:hover {
+  background-color: #417448;
+}

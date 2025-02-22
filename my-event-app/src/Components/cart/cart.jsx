@@ -29,7 +29,9 @@ const CartPage = () => {
     (acc, item) => acc + calculateTotalPrice(item),
     0
   );
-
+  const goToCheckout = () => {
+    navigate("/checkout", { state: { totalAmount: grandTotal } });
+  };
   // Remove single item
   const removeItem = (id) => {
     setCartItems(cartItems.filter((item) => item.id !== id));
@@ -58,7 +60,9 @@ const CartPage = () => {
       {/* Shopping Cart Heading */}
       <div className="cart-header">
         <h2>Shopping Cart</h2>
-        <button className="checkout-btn">Proceed to checkout</button>
+        <button className="checkout-btn" onClick={goToCheckout}>
+          Proceed to checkout
+        </button>
       </div>
 
       {/* Cart Table */}

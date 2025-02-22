@@ -10,7 +10,9 @@ import Userhome from "./Components/userhome/userhome";
 import Uservendor from "./Components/uservendors/uservendors";
 import Vendorproducts from "./Components/vendorproducts/vendorproducts";
 import Cart from "./Components/cart/cart";
-
+import Checkout from "./Components/checkout/checkout";
+import Adminhome from "./Components/adminhome/adminhome";
+import Vendorstatus from "./Components/vendorstatus/vendorstatus";
 function App() {
   return (
     <AuthProvider>
@@ -24,6 +26,9 @@ function App() {
           <Route path="/user-vendors" element={<Uservendor />} />
           <Route path="/vendor-products" element={<Vendorproducts />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/adminhome" element={<Adminhome />} />
+          <Route path="/vendorstatus" element={<Vendorstatus />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -21,16 +21,19 @@ const AddNewItem = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://127.0.0.1:8000/login/logout/", {}, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      await axios.post(
+        "http://127.0.0.1:8000/login/logout/",
+        {},
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
     } catch (error) {
       console.error("Error during logout:", error);
     }
-    logout(); 
-    navigate("/"); 
+    logout();
+    navigate("/");
   };
-
 
   // 🔹 Fetch vendor's products on mount
   useEffect(() => {
@@ -182,8 +185,17 @@ const AddNewItem = () => {
   return (
     <div className="add-item-container">
       <div className="navbar">
-        <h2 className="nav-title">Vendor Panel</h2>
+        <h2 className="nav-title" onClick={() => navigate("/vendorhome")}>
+          Vendor Panel
+        </h2>
         <div className="nav-buttons">
+          <button
+            className="status-btn"
+            onClick={() => navigate("/vendorstatus")}
+          >
+            Product Status
+          </button>
+          <button className="request-btn">Request Item</button>
           <button className="view-btn">View Items</button>
           <button className="logout-btn" onClick={handleLogout}>
             Logout
