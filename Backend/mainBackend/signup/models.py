@@ -7,7 +7,7 @@ class UserManager(BaseUserManager):
             raise ValueError("Users must have an email address")
         email = self.normalize_email(email)
         user = self.model(username=username, email=email, user_type=user_type, category=category)
-        user.set_password(password)  # Hashing the password
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
@@ -18,14 +18,14 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
 class User(AbstractBaseUser, PermissionsMixin):
-    USER_TYPES = [('admin', 'Admin'), ('vendor', 'Vendor'), ('customer', 'Customer')]  # Lowercase values
+    USER_TYPES = [('Admin', 'Admin'), ('Vendor', 'Vendor'), ('Customer', 'Customer')]
+    CATEGORY_CHOICES = [('Catering', 'Catering'), ('Florist', 'Florist'), ('Decoration', 'Decoration'), ('Lighting', 'Lighting')]
 
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     user_type = models.CharField(max_length=10, choices=USER_TYPES)
-    category = models.CharField(max_length=100, blank=True, null=True)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
