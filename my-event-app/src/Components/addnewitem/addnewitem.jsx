@@ -95,7 +95,7 @@ const AddNewItem = () => {
   // 🔹 Handle delete request
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/product/delete/${id}/`, {
+      await axios.delete(`http://127.0.0.1:8000/api/product/${id}/delete/`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
@@ -132,7 +132,7 @@ const AddNewItem = () => {
     }
 
     try {
-      await axios.put(`http://127.0.0.1:8000/api/product/update/${editData.id}/`, formDataToUpdate, {
+      await axios.put(`http://127.0.0.1:8000/api/product/${editData.id}/update/`, formDataToUpdate, {
         headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "multipart/form-data" },
       });
 
