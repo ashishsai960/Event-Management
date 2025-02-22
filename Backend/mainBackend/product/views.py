@@ -1,16 +1,22 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework import generics, permissions
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Product
 from .serializers import ProductSerializer
 
-class AddProductView(APIView):
-    parser_classes = (MultiPartParser, FormParser)  # Accept multipart/form-data
+# ✅ Add a new product (Vendor only)
+class ProductCreateView(generics.CreateAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]  # Only logged-in users can add products
+    parser_classes = [MultiPartParser, FormParser]  # Supports image uploads
 
-    def post(self, request, format=None):
-        serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def perform_create(self, serializer):
+        serializer.save(vendor=self.request.user)  # Set the vendor automatically
+
+
+# ✅ Vendor can view all their products
+class VendorProductListView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Product.objects.filter(vendor=self.request.user)  # Get only the vendor's products
