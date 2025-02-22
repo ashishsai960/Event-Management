@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../Auth/AuthContext";
 import "./addnewitem.css";
 
 const AddNewItem = () => {
+  const { accessToken } = useAuth(); // Get Auth Token
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     productName: "",
     productPrice: "",
@@ -12,14 +17,45 @@ const AddNewItem = () => {
   const [items, setItems] = useState([]);
   const [editData, setEditData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const { logout } = useAuth();
 
-  // Handle input change
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://127.0.0.1:8000/login/logout/", {}, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+    logout(); 
+    navigate("/"); 
+  };
+
+
+  // 🔹 Fetch vendor's products on mount
+  useEffect(() => {
+    fetchProducts();
+  }, [accessToken]);
+
+  const fetchProducts = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://127.0.0.1:8000/api/product/my-products/",
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      setItems(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle file selection
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && ["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
@@ -35,8 +71,7 @@ const AddNewItem = () => {
     }
   };
 
-  // Add new item
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (
       !formData.productName ||
@@ -47,23 +82,35 @@ const AddNewItem = () => {
       return;
     }
 
-    const newItem = {
-      id: items.length + 1,
-      name: formData.productName,
-      price: formData.productPrice,
-      image: formData.imagePreview,
-    };
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.productName);
+    formDataToSend.append("price", formData.productPrice);
+    formDataToSend.append("image", formData.productImage);
 
-    setItems([...items, newItem]);
-    setFormData({
-      productName: "",
-      productPrice: "",
-      productImage: null,
-      imagePreview: null,
-    });
+    try {
+      await axios.post(
+        "http://127.0.0.1:8000/api/product/add/",
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      fetchProducts();
+      setFormData({
+        productName: "",
+        productPrice: "",
+        productImage: null,
+        imagePreview: null,
+      });
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
   };
 
-  // Open Edit Modal
   const handleEdit = (item) => {
     setEditData({
       id: item.id,
@@ -75,13 +122,19 @@ const AddNewItem = () => {
     setShowModal(true);
   };
 
-  // Handle Delete Function
-  const handleDelete = (id) => {
-    const updatedItems = items.filter((item) => item.id !== id);
-    setItems(updatedItems);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/product/${id}/delete/`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      fetchProducts(); // Refresh products
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
 
-  // Handle File Change in Modal
+  // 🔹 Handle file change in Edit Modal
   const handleEditFileChange = (e) => {
     const file = e.target.files[0];
     if (file && ["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
@@ -96,21 +149,34 @@ const AddNewItem = () => {
     }
   };
 
-  // Handle Update in Modal
-  const handleUpdate = (e) => {
+  // 🔹 Handle update in Edit Modal
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    const updatedItems = items.map((item) =>
-      item.id === editData.id
-        ? {
-            id: editData.id,
-            name: editData.productName,
-            price: editData.productPrice,
-            image: editData.imagePreview,
-          }
-        : item
-    );
-    setItems(updatedItems);
-    setShowModal(false);
+
+    const formDataToUpdate = new FormData();
+    formDataToUpdate.append("name", editData.productName);
+    formDataToUpdate.append("price", editData.productPrice);
+    if (editData.productImage) {
+      formDataToUpdate.append("image", editData.productImage);
+    }
+
+    try {
+      await axios.put(
+        `http://127.0.0.1:8000/api/product/${editData.id}/update/`,
+        formDataToUpdate,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      fetchProducts(); // Refresh products
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
   };
 
   return (
@@ -119,11 +185,14 @@ const AddNewItem = () => {
         <h2 className="nav-title">Vendor Panel</h2>
         <div className="nav-buttons">
           <button className="view-btn">View Items</button>
-          <button className="logout-btn">Logout</button>
+          <button className="logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </div>
 
       <div className="content-container">
+        {/* Left Panel - Add Product */}
         <div className="form-section">
           <h2>Add New Item</h2>
           <form onSubmit={handleSubmit}>
@@ -131,7 +200,6 @@ const AddNewItem = () => {
               type="text"
               name="productName"
               placeholder="Product Name"
-              value={formData.productName}
               onChange={handleChange}
               required
             />
@@ -139,7 +207,6 @@ const AddNewItem = () => {
               type="number"
               name="productPrice"
               placeholder="Product Price"
-              value={formData.productPrice}
               onChange={handleChange}
               required
             />
@@ -164,6 +231,7 @@ const AddNewItem = () => {
           </form>
         </div>
 
+        {/* Right Panel - Product List */}
         <div className="table-section">
           <h2>Product List</h2>
           <table>
@@ -218,6 +286,7 @@ const AddNewItem = () => {
         </div>
       </div>
 
+      {/* Edit Modal */}
       {showModal && (
         <div className="modal">
           <div className="modal-content">
@@ -226,7 +295,7 @@ const AddNewItem = () => {
               <input
                 type="text"
                 name="productName"
-                value={editData.productName}
+                value={formData.productName}
                 onChange={(e) =>
                   setEditData({ ...editData, productName: e.target.value })
                 }
@@ -235,7 +304,7 @@ const AddNewItem = () => {
               <input
                 type="number"
                 name="productPrice"
-                value={editData.productPrice}
+                value={formData.productPrice}
                 onChange={(e) =>
                   setEditData({ ...editData, productPrice: e.target.value })
                 }
@@ -250,23 +319,16 @@ const AddNewItem = () => {
                 accept=".jpg, .jpeg, .png"
                 onChange={handleEditFileChange}
               />
-              {editData.imagePreview && (
-                <div className="image-preview">
-                  <img src={editData.imagePreview} alt="Preview" />
-                </div>
-              )}
-              <div className="modal-buttons">
-                <button type="submit" className="save-btn">
-                  Save Changes
-                </button>
-                <button
-                  type="button"
-                  className="close-btn"
-                  onClick={() => setShowModal(false)}
-                >
-                  Close
-                </button>
-              </div>
+              <button type="submit" className="save-btn">
+                Save Changes
+              </button>
+              <button
+                type="button"
+                className="close-btn"
+                onClick={() => setShowModal(false)}
+              >
+                Close
+              </button>
             </form>
           </div>
         </div>

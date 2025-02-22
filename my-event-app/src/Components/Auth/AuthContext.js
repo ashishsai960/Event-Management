@@ -5,27 +5,44 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
+  const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken"));
 
+  // 🔹 Login: Save user & tokens
   const login = (userData) => {
     setUser({
       userId: userData.user_id,
       username: userData.username,
       userType: userData.user_type,
-      category: userData.category,
     });
     setAccessToken(userData.access_token);
     setRefreshToken(userData.refresh_token);
+
+    // Persist tokens in localStorage
+    localStorage.setItem("accessToken", userData.access_token);
+    localStorage.setItem("refreshToken", userData.refresh_token);
   };
 
-  const logout = () => {
+  // 🔹 Logout: Clear user & tokens, call backend logout
+  const logout = async () => {
+    try {
+      await axios.post("http://127.0.0.1:8000/login/logout/", {}, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+
     setUser(null);
     setAccessToken(null);
     setRefreshToken(null);
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+
+    window.location.href = "/"; // Redirect to login page
   };
 
-  // Axios request interceptor to attach token
+  // 🔹 Attach token to every request
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use((config) => {
       if (accessToken) {
@@ -39,13 +56,14 @@ export const AuthProvider = ({ children }) => {
     };
   }, [accessToken]);
 
-  // Function to refresh the access token
+  // 🔹 Refresh Token Function
   const refreshAccessToken = async () => {
     try {
       const { data } = await axios.post("http://127.0.0.1:8000/token/refresh/", {
         refresh: refreshToken,
       });
       setAccessToken(data.access_token);
+      localStorage.setItem("accessToken", data.access_token);
       return data.access_token;
     } catch (error) {
       console.error("Token refresh failed", error);
@@ -53,7 +71,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Axios response interceptor to refresh token if expired
+  // 🔹 Handle expired tokens (401 response)
   useEffect(() => {
     const responseInterceptor = axios.interceptors.response.use(
       (response) => response,
@@ -77,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   }, [accessToken, refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, accessToken, refreshAccessToken }}>
+    <AuthContext.Provider value={{ user, login, logout, accessToken }}>
       {children}
     </AuthContext.Provider>
   );

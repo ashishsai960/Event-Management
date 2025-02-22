@@ -9,11 +9,31 @@ import {
   FaPalette,
 } from "react-icons/fa";
 import "./userhome.css";
+import axios from "axios";
+import { useAuth } from "../Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const UserHome = () => {
   const [showVendorOptions, setShowVendorOptions] = useState(false);
+  const { logout } = useAuth();
+  const { accessToken } = useAuth();
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://127.0.0.1:8000/login/logout/",
+        {},
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+    logout();
+    navigate("/");
+  };
 
   const handleVendorSelect = (vendor) => {
     navigate("/user-vendors", { state: { vendor } });
@@ -24,6 +44,9 @@ const UserHome = () => {
       {/* Navbar */}
       <div className="navbar">
         <h1 className="nav-title">Welcome User</h1>
+        <button className="logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
         <div className="nav-btns">
           <button className="cart-btn" onClick={() => navigate("/cart")}>
             Cart
