@@ -2,14 +2,24 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./vendorhome.css";
 import { FaBoxOpen, FaPlusCircle, FaMoneyBillWave } from "react-icons/fa";
+import { useAuth } from "../Auth/AuthContext";
+import axios from "axios";
 
 const VendorHome = () => {
   const navigate = useNavigate();
+  const { accessToken } = useAuth();
+  const { logout } = useAuth();
 
-  const handleLogout = () => {
-    // Handle logout logic
-    console.log("User Logged Out");
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://127.0.0.1:8000/login/logout/", {}, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+    logout(); 
+    navigate("/"); 
   };
 
   const handleAddItem = () => {
