@@ -23,6 +23,12 @@ const Login = () => {
     try {
       const { data } = await axios.post("http://127.0.0.1:8000/login/login/", formData);
       login(data);
+      
+      Swal.fire({
+              icon: "success",
+              title: "Login Successful",
+              text: "You can now log in!",
+            });
 
       // 🚀 Debug: Redirect to signup after successful login
       navigate("/signup");

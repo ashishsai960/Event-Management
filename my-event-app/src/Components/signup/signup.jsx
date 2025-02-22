@@ -99,7 +99,7 @@ const Signup = () => {
             <option value="">User Type</option>
             <option value="admin">Admin</option>
             <option value="vendor">Vendor</option>
-            <option value="user">User</option>
+            <option value="customer">Customer</option>
           </select>
           {formData.userType === "vendor" && (
             <select
