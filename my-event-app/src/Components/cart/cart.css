@@ -1,0 +1,134 @@
+/* Cart Page Container */
+.cart-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #333;
+  color: white;
+  padding: 20px 40px;
+  height: 30px;
+}
+
+.nav-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.nav-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-button {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 120px;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: #cc0000;
+  color: white;
+}
+
+/* Shopping Cart Heading */
+.cart-header {
+  text-align: center;
+  margin: 20px auto;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* Checkout Button */
+.checkout-btn {
+  background-color: #56b16b;
+  color: white;
+  padding: 12px 25px;
+  font-size: 18px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  width: 300px; /* Fixed Width */
+  text-align: center;
+}
+
+/* Cart Table */
+.cart-table-container {
+  margin: 0 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cart-table th,
+.cart-table td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-table th {
+  background-color: #333;
+  color: white;
+}
+
+/* Product Image */
+.product-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+/* Action Column */
+.small-col {
+  width: 100px;
+  text-align: center;
+}
+
+/* Remove & Delete All Buttons */
+.remove-btn,
+.delete-all-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-all-btn {
+  width: 100%;
+}
+
+/* Grand Total Row */
+.grand-total-row {
+  font-weight: bold;
+  background-color: #f1f1f1;
+  height: 40px;
+}
+
+.text-right {
+  text-align: right;
+}

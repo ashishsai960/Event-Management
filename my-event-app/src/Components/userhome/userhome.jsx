@@ -21,14 +21,22 @@ const UserHome = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://127.0.0.1:8000/login/logout/", {}, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      await axios.post(
+        "http://127.0.0.1:8000/login/logout/",
+        {},
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
     } catch (error) {
       console.error("Error during logout:", error);
     }
-    logout(); 
-    navigate("/"); 
+    logout();
+    navigate("/");
+  };
+
+  const handleVendorSelect = (vendor) => {
+    navigate("/user-vendors", { state: { vendor } });
   };
 
   return (
@@ -36,7 +44,17 @@ const UserHome = () => {
       {/* Navbar */}
       <div className="navbar">
         <h1 className="nav-title">Welcome User</h1>
-        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+        <button className="logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
+        <div className="nav-btns">
+          <button className="cart-btn" onClick={() => navigate("/cart")}>
+            Cart
+          </button>
+          <button className="logout-btn" onClick={() => alert("Logging Out!")}>
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -52,16 +70,28 @@ const UserHome = () => {
           {/* Expanding Options Inside Vendor Card */}
           {showVendorOptions && (
             <div className="vendor-options">
-              <div className="vendor-option">
+              <div
+                className="vendor-option"
+                onClick={() => handleVendorSelect("Catering")}
+              >
                 <FaUtensils /> Catering
               </div>
-              <div className="vendor-option">
+              <div
+                className="vendor-option"
+                onClick={() => handleVendorSelect("Florist")}
+              >
                 <FaLeaf /> Florist
               </div>
-              <div className="vendor-option">
+              <div
+                className="vendor-option"
+                onClick={() => handleVendorSelect("Decoration")}
+              >
                 <FaPalette /> Decoration
               </div>
-              <div className="vendor-option">
+              <div
+                className="vendor-option"
+                onClick={() => handleVendorSelect("Lighting")}
+              >
                 <FaLightbulb /> Lighting
               </div>
             </div>
