@@ -33,6 +33,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post("http://127.0.0.1:8000/signup/register/", userData);
+      console.log("response from backend: ", response.data)
 
       Swal.fire({
         icon: "success",

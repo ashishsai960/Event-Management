@@ -18,8 +18,9 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser, PermissionsMixin):
-    USER_TYPES = [('Admin', 'Admin'), ('Vendor', 'Vendor'), ('Customer', 'Customer')]
+    USER_TYPES = [('admin', 'Admin'), ('vendor', 'Vendor'), ('customer', 'Customer')]  # Lowercase values
 
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
