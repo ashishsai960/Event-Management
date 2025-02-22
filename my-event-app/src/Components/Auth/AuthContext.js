@@ -8,24 +8,25 @@ export const AuthProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
 
+  // Login: Save user & tokens
   const login = (userData) => {
     setUser({
       userId: userData.user_id,
       username: userData.username,
       userType: userData.user_type,
-      category: userData.category,
     });
     setAccessToken(userData.access_token);
     setRefreshToken(userData.refresh_token);
   };
 
+  // Logout: Clear user & tokens
   const logout = () => {
     setUser(null);
     setAccessToken(null);
     setRefreshToken(null);
   };
 
-  // Axios request interceptor to attach token
+  // Attach token to every request
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use((config) => {
       if (accessToken) {
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     };
   }, [accessToken]);
 
-  // Function to refresh the access token
+  // Refresh Token Function
   const refreshAccessToken = async () => {
     try {
       const { data } = await axios.post("http://127.0.0.1:8000/token/refresh/", {
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Axios response interceptor to refresh token if expired
+  // Handle expired tokens (401 response)
   useEffect(() => {
     const responseInterceptor = axios.interceptors.response.use(
       (response) => response,
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   }, [accessToken, refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, accessToken, refreshAccessToken }}>
+    <AuthContext.Provider value={{ user, login, logout, accessToken }}>
       {children}
     </AuthContext.Provider>
   );
