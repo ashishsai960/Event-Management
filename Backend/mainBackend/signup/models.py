@@ -19,8 +19,8 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser, PermissionsMixin):
-    USER_TYPES = [('Admin', 'Admin'), ('Vendor', 'Vendor'), ('Customer', 'Customer')]
-    CATEGORY_CHOICES = [('Catering', 'Catering'), ('Florist', 'Florist'), ('Decoration', 'Decoration'), ('Lighting', 'Lighting')]
+    USER_TYPES = [('admin', 'Admin'), ('vendor', 'Vendor'), ('customer', 'Customer')]
+    CATEGORY_CHOICES = [('catering', 'Catering'), ('florist', 'Florist'), ('decoration', 'Decoration'), ('lighting', 'Lighting')]
 
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)

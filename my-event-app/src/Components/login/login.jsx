@@ -31,12 +31,11 @@ const Login = () => {
         text: "Welcome!",
       });
 
-      // Redirect based on user type
       switch (data.user_type) {
         case "vendor":
           navigate("/vendorhome");
           break;
-        case "user":
+        case "customer":
           navigate("/userhome");
           break;
         default:
