@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
+import axios from "axios";
 import "./login.css";
 
 const Login = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -12,9 +16,29 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Submitted", formData);
+
+    try {
+      const { data } = await axios.post("http://127.0.0.1:8000/login/login/", formData);
+      login(data); 
+
+      // switch (data.user_type) {
+      //   case "admin":
+      //     navigate("/adminhome");
+      //     break;
+      //   case "vendor":
+      //     navigate("/vendorhome");
+      //     break;
+      //   case "user":
+      //     navigate("/userhome");
+      //     break;
+      //   default:
+      //     navigate("/");
+      // }
+    } catch (error) {
+      console.error("Login error:", error.response?.data || error.message);
+    }
   };
 
   return (
@@ -43,9 +67,6 @@ const Login = () => {
           />
           <button type="submit">Log In</button>
         </form>
-        <p>
-          Don't have an account? <Link to="/signup">Sign Up</Link>
-        </p>
       </div>
     </div>
   );
