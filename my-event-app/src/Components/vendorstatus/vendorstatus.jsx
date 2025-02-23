@@ -22,13 +22,13 @@ const VendorStatus = () => {
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [newStatus, setNewStatus] = useState("");
 
-  // Open the status update pop-up
+
   const openUpdatePopup = (vendor) => {
     setSelectedVendor(vendor);
-    setNewStatus(vendor.status); // Default selected value
+    setNewStatus(vendor.status); 
   };
 
-  // Handle updating the status
+  
   const handleUpdate = () => {
     if (selectedVendor) {
       setVendors(
@@ -36,11 +36,11 @@ const VendorStatus = () => {
           v.id === selectedVendor.id ? { ...v, status: newStatus } : v
         )
       );
-      setSelectedVendor(null); // Close the modal
+      setSelectedVendor(null);
     }
   };
 
-  // Handle deleting a vendor
+
   const handleDelete = (id) => {
     setVendors(vendors.filter((v) => v.id !== id));
   };
