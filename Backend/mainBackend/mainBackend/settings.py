@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'product',
     'User',
-    "cart"
+    "cart",
+    'admin_panel',
 ]
 
 DATABASES = {
