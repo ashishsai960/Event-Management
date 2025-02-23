@@ -1,0 +1,72 @@
+/* Nav Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #333;
+  color: white;
+  padding: 20px 40px;
+  height: 30px;
+}
+
+.nav-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+/* Logout Button */
+.logout-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 120px;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #cc0000;
+}
+
+/* Heading */
+.order-status-heading {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Table Container */
+.table-container {
+  width: 95%;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+/* Order Status Table */
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  text-align: left;
+}
+
+.order-table th,
+.order-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+}
+
+.order-table th {
+  background: #c0adad;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background: #f2f2f2;
+}

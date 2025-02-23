@@ -13,6 +13,7 @@ import Cart from "./Components/cart/cart";
 import Checkout from "./Components/checkout/checkout";
 import Adminhome from "./Components/adminhome/adminhome";
 import Vendorstatus from "./Components/vendorstatus/vendorstatus";
+import Orderstatus from "./Components/orderstatus/orderstatus";
 function App() {
   return (
     <AuthProvider>
@@ -29,6 +30,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/adminhome" element={<Adminhome />} />
           <Route path="/vendorstatus" element={<Vendorstatus />} />
+          <Route path="/orderstatus" element={<Orderstatus />} />
         </Routes>
       </Router>
     </AuthProvider>
